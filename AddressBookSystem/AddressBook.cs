@@ -121,5 +121,16 @@ namespace AddressBookSystem
                 }
             }
         }
+        public void DeleteRecord(string fname)  
+        {
+            foreach (var record in addressbook.ToList()) 
+            {
+                if (record.fName == fname)  
+                {
+                    addressbook.Remove(record); 
+                    Console.WriteLine("\nRecord Deleted Successfully");
+                }
+            }
+        }
     }
 }
