@@ -8,10 +8,72 @@ namespace AddressBookSystem
 {
     internal class AddressBook
     {
-        List<PersonInput> addressbook = new List<PersonInput>(); 
-        public void AddRecords()
+
+        List<string> addressBookName = new List<string>();
+        Dictionary<string, List<PersonInput>> dict = new Dictionary<string, List<PersonInput>>();
+        public void CreateAddressBook(string dictName)
         {
-            PersonInput input = new PersonInput(); 
+            addressBookName.Add(dictName); // Add address book name
+
+            if (dict.Count == 0) // Checking dictionary is empty or not
+            {
+                dict.Add(dictName, new List<PersonInput>()); //Creating Key value of unique name and contact info
+            }
+            else
+            {
+                if (dict.ContainsKey(dictName)) // Checking Duplicasy
+                {
+                    Console.WriteLine("This AddressBook is also present");
+                }
+                else
+                {
+                    dict.Add(dictName, new List<PersonInput>()); // creating key value pair where address book name is key and all the redord of address book as value
+                }
+
+            }
+        }
+        public int temp = 0;
+        public void DiplayListOfAddressBook() // Class method to display name Address book
+        {
+            if (addressBookName.Count == 0) // Checking that address book list is empty or not
+            {
+                Console.WriteLine("\nThere is no address book avilable");
+                temp = 1;
+            }
+            else
+            {
+                foreach (string list in addressBookName) // Accessing all the names in address book
+                {
+                    Console.WriteLine("\n\nList of existing Address Book Are : ");
+                    Console.WriteLine(list);
+                    Console.WriteLine();
+                }
+            }
+        }
+        public void DisplayDictionary() //  Display all the records
+        {
+            foreach (var content in dict.Keys) // Accessing all the address book name of dictionary
+            {
+                Console.WriteLine("\n\nAddress Book : " + content);
+                int i = 1;
+                foreach (var value in dict[content].ToList()) // Printing all the address book records  by dictionary key
+                {
+                    Console.WriteLine("\nRecord - " + i);
+                    Console.WriteLine("First Name : " + value.fName);
+                    Console.WriteLine("Last Name : " + value.lName);
+                    Console.WriteLine("Address : " + value.address);
+                    Console.WriteLine("City : " + value.city);
+                    Console.WriteLine("State : " + value.state);
+                    Console.WriteLine("Email : " + value.email);
+                    Console.WriteLine("Zip code : " + value.zip);
+                    Console.WriteLine("Phone Number : " + value.phoneNumber);
+                    i++;
+                }
+            }
+        }
+        public void AddRecords(string name)
+        {
+            PersonInput input = new PersonInput();                                             
             Console.WriteLine("\nEnter your First Name : ");
             input.fName = Console.ReadLine();
             Console.WriteLine("Enter your Last Name : ");
@@ -28,125 +90,151 @@ namespace AddressBookSystem
             input.phoneNumber = Convert.ToInt64(Console.ReadLine());
             Console.WriteLine("Enter your Email Address: ");
             input.email = Console.ReadLine();
-            if (addressbook.Count == 0) // Checking that list is empty or not
+            foreach (var content in dict.Keys) // Accessing all the address book name of dictionary
             {
-                addressbook.Add(input); // Adding All the details of user in list
-                Console.WriteLine("\nRecord Added successfully in Address Book");
-            }
-            else
-            {
-                foreach (var record in addressbook.ToList()) // Accessing all the records of list one by one using foreach loop
+                if (content == name) // Checking that address book name provied by user is matching with dictionary address book or not
                 {
-                    if (record.phoneNumber == input.phoneNumber) //Checking that phone number provided by user is already present in addressbook or not
+                    if (dict[content].Count == 0)
                     {
-                        Console.WriteLine("\nThis record is already present in AddressBook");
-                        AddRecords(); // Again takes details from user
+                        dict[name].Add(input);// Adding person record in Address book 
+                        Console.WriteLine("\nRecord Added successfully in Address Book");
                     }
                     else
                     {
-                        addressbook.Add(input); // Adding All the details of user in list
-                        Console.WriteLine("\nRecord Added successfully in Address Book");
-                    }
-                }
-            }
-        }
-        public void PrintRecords()
-        {
-            int i = 1;
-            foreach (var record in addressbook) 
-            {
-                Console.WriteLine("\n\nRecord - " + i);
-                Console.WriteLine("First Name : " + record.fName);
-                Console.WriteLine("Last Name : " + record.lName);
-                Console.WriteLine("Address : " + record.address);
-                Console.WriteLine("City : " + record.city);
-                Console.WriteLine("State : " + record.state);
-                Console.WriteLine("Email : " + record.email);
-                Console.WriteLine("Zip code : " + record.zip);
-                Console.WriteLine("Phone Number : " + record.phoneNumber);
-                i++;
-            }
-        }
-        public void UpdateRecords(string fn, string ln) 
-        {
-            foreach (var record in addressbook)
-            {
-                if (record.fName == fn && record.lName == ln)
-                {
-
-                    Console.WriteLine("\nWhich field you want to update : ");
-                    Console.WriteLine("\n1:First Name\n2.Last Name\n3.Address\n4.City\n5.State\n6.Email\n7.Zip Code\n8.PhoneNumber");
-                    Console.WriteLine("Enter your Choice : ");
-                    int ch = Convert.ToInt32(Console.ReadLine()); 
-                    switch (ch)
-                    {
-                        case 1:
-                            Console.WriteLine("\nEnter new first name : ");
-                            string f = Console.ReadLine();
-                            record.fName = f; 
-                            Console.WriteLine("\nFirst Name Updated Successfully");
-                            break;
-                        case 2:
-                            Console.WriteLine("\nEnter new last name : ");
-                            string l = Console.ReadLine();
-                            record.lName = l;
-                            Console.WriteLine("\nLast Name Updated Successfully");
-                            break;
-                        case 3:
-                            Console.WriteLine("\nEnter new address : ");
-                            string a = Console.ReadLine();
-                            record.address = a;
-                            Console.WriteLine("\nAddress Updated Successfully");
-                            break;
-                        case 4:
-                            Console.WriteLine("\nEnter new city name : ");
-                            string c = Console.ReadLine();
-                            record.city = c;
-                            Console.WriteLine("\nCity Name Updated Successfully");
-                            break;
-                        case 5:
-                            Console.WriteLine("\nEnter new state : ");
-                            string s = Console.ReadLine();
-                            record.state = s; 
-                            Console.WriteLine("\nState Name Updated Successfully");
-                            break;
-                        case 6:
-                            Console.WriteLine("\nEnter new email : ");
-                            string e = Console.ReadLine();
-                            record.email = e;
-                            Console.WriteLine("\nEmail Updated Successfully");
-                            break;
-                        case 7:
-                            Console.WriteLine("\nEnter new Zip Code : ");
-                            int z = Convert.ToInt32(Console.ReadLine());
-                            record.zip = z;
-                            Console.WriteLine("\nZip Code Updated Successfully");
-                            break;
-                        case 8:
-                            Console.WriteLine("\nEnter new Phone Number : ");
-                            int p = Convert.ToInt32(Console.ReadLine());
-                            record.phoneNumber = p;
-                            Console.WriteLine("\nPhone Number Updated Successfully");
-                            break;
-                        default:
-                            Console.WriteLine("Enter valid choice");
-                            break;
+                        foreach (var value in dict[content].ToList())
+                        {
+                            if (value.phoneNumber != input.phoneNumber) 
+                            {
+                                dict[name].Add(input);
+                                Console.WriteLine("\nRecord Added successfully in Address Book");
+                            }
+                            else
+                            {
+                                Console.WriteLine($"\nThis Record is already present in {content} Address Book");
+                            }
+                        }
                     }
                 }
                 else
                 {
-                    Console.WriteLine("Your entered details not match with any records");
+                    Console.WriteLine($"\n{content} Address Book not found");
+                }
+
+            }
+
+        }
+        string fn, ln;
+        public void UpdateRecords(string ab)
+        {
+            foreach (var content in dict.Keys)
+            {
+                if (content == ab)
+                {
+                    Console.WriteLine("\nEnter your First Name : ");
+                    fn = Console.ReadLine();
+                    Console.WriteLine("Enter your Last Name : ");
+                    ln = Console.ReadLine();
+                    foreach (var value in dict[content].ToList())
+                    {
+                        if (value.fName == fn && value.lName == ln)
+                        {
+                            Console.WriteLine("\n\nWhich field you want to update : ");
+                            Console.WriteLine("\n1:First Name\n2.Last Name\n3.Address\n4.City\n5.State\n6.Email\n7.Zip Code\n8.PhoneNumber\n9.Exit");
+                            Console.WriteLine("\nEnter your Choice : ");
+                            int ch = Convert.ToInt32(Console.ReadLine()); 
+                            switch (ch)
+                            {
+                                case 1:
+                                    Console.WriteLine("\nEnter new first name : ");
+                                    string f = Console.ReadLine();
+                                    value.fName = f; // Update the first name of record in address book
+                                    Console.WriteLine("\nFirst Name Updated Successfully");
+                                    break;
+                                case 2:
+                                    Console.WriteLine("\nEnter new last name : ");
+                                    string l = Console.ReadLine();
+                                    value.lName = l;  // Update the last name of record in address book
+                                    Console.WriteLine("\nLast Name Updated Successfully");
+                                    break;
+                                case 3:
+                                    Console.WriteLine("\nEnter new address : ");
+                                    string a = Console.ReadLine();
+                                    value.address = a; // Update the address of record in address book
+                                    Console.WriteLine("\nAddress Updated Successfully");
+                                    break;
+                                case 4:
+                                    Console.WriteLine("\nEnter new city name : ");
+                                    string c = Console.ReadLine();
+                                    value.city = c; // Update the city name of record in address book
+                                    Console.WriteLine("\nCity Name Updated Successfully");
+                                    break;
+                                case 5:
+                                    Console.WriteLine("\nEnter new state : ");
+                                    string s = Console.ReadLine();
+                                    value.state = s; // Update the state name of record in address book
+                                    Console.WriteLine("\nState Name Updated Successfully");
+                                    break;
+                                case 6:
+                                    Console.WriteLine("\nEnter new email : ");
+                                    string e = Console.ReadLine();
+                                    value.email = e; // Update the email name of record in address book
+                                    Console.WriteLine("\nEmail Updated Successfully");
+                                    break;
+                                case 7:
+                                    Console.WriteLine("\nEnter new Zip Code : ");
+                                    int z = Convert.ToInt32(Console.ReadLine());
+                                    value.zip = z; // Update the zipcode of record in address book
+                                    Console.WriteLine("\nZip Code Updated Successfully");
+                                    break;
+                                case 8:
+                                    Console.WriteLine("\nEnter new Phone Number : ");
+                                    int p = Convert.ToInt32(Console.ReadLine());
+                                    value.phoneNumber = p; // Update the phone number of record in address book
+                                    Console.WriteLine("\nPhone Number Updated Successfully");
+                                    break;
+                                default:
+                                    Console.WriteLine("\nEnter valid choice");
+                                    break;
+                            }
+                        }
+                        else
+                        {
+                            Console.WriteLine("Record not found");
+                        }
+                    }
+                }
+                else
+                {
+                    Console.WriteLine("Address book not found");
                 }
             }
         }
-        public void DeleteRecord(string fname)  
+        public void DeleteRecord(string ab) 
         {
-            foreach (var record in addressbook.ToList()) 
+            foreach (var content in dict.Keys)
             {
-                if (record.fName == fname)  
+                if (content == ab)
                 {
-                    addressbook.Remove(record); 
-                    Console.WriteLine("\nRecord Deleted Successfully");
+                    Console.WriteLine("\nEnter your First Name : ");
+                    fn = Console.ReadLine();
+                    Console.WriteLine("Enter your Last Name : ");
+                    ln = Console.ReadLine();
+                    foreach (var value in dict[content].ToList())
+                    {
+                        if (value.fName == fn && value.lName == ln)
+                        {
+                            dict[content].Remove(value);
+                            Console.WriteLine("\nRecord Deleted Successfully");
+                        }
+                        else
+                        {
+                            Console.WriteLine("Record not found");
+                        }
+                    }
+                }
+                else
+                {
+                    Console.WriteLine("Address book not found");
                 }
             }
         }
