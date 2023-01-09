@@ -12,7 +12,6 @@ namespace AddressBookSystem
         public void AddRecords()
         {
             PersonInput input = new PersonInput(); 
-            Details:
             Console.WriteLine("\nEnter your First Name : ");
             input.fName = Console.ReadLine();
             Console.WriteLine("Enter your Last Name : ");
@@ -41,7 +40,7 @@ namespace AddressBookSystem
                     if (record.phoneNumber == input.phoneNumber) //Checking that phone number provided by user is already present in addressbook or not
                     {
                         Console.WriteLine("\nThis record is already present in AddressBook");
-                        goto Details; // Again takes details from user
+                        AddRecords(); // Again takes details from user
                     }
                     else
                     {
